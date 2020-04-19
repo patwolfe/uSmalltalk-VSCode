@@ -1,0 +1,54 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "uSmalltalk",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.usmalltalk-syntax",
+				"match": "\\b(set|begin|primitive|return|block|locals)\\b"
+				},
+				{
+				"name": "keyword.other.usmalltalk-syntax",
+				"match": "\\b(class-method|class|method|self|super|ivars|subclass-of)\\b"
+				},
+				{
+				"name": "support.class",
+				"match": "\\bclass\\b"
+				},
+				{
+				"name": "entity.name.class",
+				"match": "\\b[A-Z][^ \t]*\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.usmalltalk-syntax",
+			"begin": "'",
+			"end": "[ \t\n]",
+			"patterns": [
+				{
+					"name": "constant.character.escape.usmalltalk-syntax",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"name": "comment.line.double-slash",
+			"begin": ";;",
+			"end": "\n",
+			"patterns": [{"name": "comment.line", "match": "\\\\."}]
+		}
+	},
+	"scopeName": "source.smt"
+}

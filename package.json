@@ -1,0 +1,25 @@
+{
+    "name": "usmalltalk",
+    "displayName": "usmalltalk",
+    "description": "Syntax highlighting for uSmalltalk language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.44.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "usmalltalk-syntax",
+            "aliases": ["uSmalltalk", "usmalltalk-syntax"],
+            "extensions": [".smt"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "usmalltalk-syntax",
+            "scopeName": "source.smt",
+            "path": "./syntaxes/usmalltalk-syntax.tmLanguage.json"
+        }]
+    }
+}
