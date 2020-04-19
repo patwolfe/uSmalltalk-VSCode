@@ -1,2 +1,2 @@
 # uSmalltalk-VSCode
-WIP
+Syntax highlighting for the uSmalltalk language.

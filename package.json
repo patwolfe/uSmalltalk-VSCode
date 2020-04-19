@@ -1,8 +1,9 @@
 {
     "name": "usmalltalk",
+    "publisher": "PatrickWolfe",
     "displayName": "usmalltalk",
     "description": "Syntax highlighting for uSmalltalk language",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "engines": {
         "vscode": "^1.44.0"
     },
@@ -21,5 +22,9 @@
             "scopeName": "source.smt",
             "path": "./syntaxes/usmalltalk-syntax.tmLanguage.json"
         }]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wolfep15/uSmalltalk-VSCode.git"
     }
 }
