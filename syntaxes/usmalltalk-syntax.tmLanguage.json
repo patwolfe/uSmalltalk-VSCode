@@ -48,7 +48,7 @@
 		},
 		"comments": {
 			"name": "comment.line.double-slash",
-			"begin": ";;",
+			"begin": ";",
 			"end": "\n",
 			"patterns": [{"name": "comment.line", "match": "\\\\."}]
 		},
