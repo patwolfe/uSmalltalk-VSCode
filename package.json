@@ -11,20 +11,35 @@
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "usmalltalk-syntax",
-            "aliases": ["uSmalltalk", "usmalltalk-syntax"],
-            "extensions": [".smt"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "usmalltalk-syntax",
-            "scopeName": "source.smt",
-            "path": "./syntaxes/usmalltalk-syntax.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "usmalltalk-syntax",
+                "aliases": [
+                    "uSmalltalk",
+                    "usmalltalk-syntax"
+                ],
+                "extensions": [
+                    ".smt"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "usmalltalk-syntax",
+                "scopeName": "source.usmalltalk",
+                "path": "./syntaxes/usmalltalk-syntax.tmLanguage.json"
+            }
+        ]
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/wolfep15/uSmalltalk-VSCode.git"
+    },
+    "scripts": {
+        "package": "vsce package"
+    },
+    "devDependencies": {
+        "vsce": "^1.81.1"
     }
 }
