@@ -424,13 +424,21 @@ contexts [] {
 
          # primitive
          : inline_push {
-            regex \= (\primitive\b)
+            regex \= (\bprimitive\b)
             styles[] = .keyword ;
             : pop {
                regex \= ((?=\)))
                styles[] = .zerowidth;
             }
-            : include "expression";
+            : inline_push {
+               regex \= ($${__NAME})
+               styles[] = .predefined;
+               :pop{
+                  regex \= ((?=\)))
+                  styles[] = .zerowidth;
+               }
+               : include "expression";
+            }
          }
          
         # compiled-method

@@ -782,7 +782,7 @@
                                         }
                                 },
                                 {
-                                        "begin": "(\\primitive\\b)",
+                                        "begin": "(\\bprimitive\\b)",
                                         "beginCaptures": {
                                                 "1": {
                                                         "name": "keyword.other.usmalltalk"
@@ -809,7 +809,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__6"
+                                                        "include": "#parenthesized_exp__7"
                                                 }
                                         ],
                                         "end": "((?=\\)))",
@@ -828,7 +828,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__10"
+                                                        "include": "#parenthesized_exp__11"
                                                 }
                                         ],
                                         "end": "((?=\\)))",
@@ -853,6 +853,18 @@
                 "parenthesized_exp__10": {
                         "patterns": [
                                 {
+                                        "match": "(\\blocals\\b)",
+                                        "name": "keyword.other.usmalltalk"
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.other.usmalltalk"
+                                }
+                        ]
+                },
+                "parenthesized_exp__11": {
+                        "patterns": [
+                                {
                                         "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
                                         "beginCaptures": {
                                                 "1": {
@@ -861,7 +873,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__11"
+                                                        "include": "#parenthesized_exp__12"
                                                 }
                                         ],
                                         "end": "((?=\\)))",
@@ -873,7 +885,7 @@
                                 }
                         ]
                 },
-                "parenthesized_exp__11": {
+                "parenthesized_exp__12": {
                         "patterns": [
                                 {
                                         "include": "#expression"
@@ -920,11 +932,34 @@
                 "parenthesized_exp__5": {
                         "patterns": [
                                 {
-                                        "include": "#expression"
+                                        "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "constant.language.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__6"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
                                 }
                         ]
                 },
                 "parenthesized_exp__6": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__7": {
                         "patterns": [
                                 {
                                         "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
@@ -939,7 +974,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__7"
+                                                        "include": "#parenthesized_exp__8"
                                                 }
                                         ],
                                         "end": "(\\))",
@@ -958,7 +993,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__8"
+                                                        "include": "#parenthesized_exp__9"
                                                 }
                                         ],
                                         "end": "((?=\\)))",
@@ -970,7 +1005,7 @@
                                 }
                         ]
                 },
-                "parenthesized_exp__7": {
+                "parenthesized_exp__8": {
                         "patterns": [
                                 {
                                         "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
@@ -978,7 +1013,7 @@
                                 }
                         ]
                 },
-                "parenthesized_exp__8": {
+                "parenthesized_exp__9": {
                         "patterns": [
                                 {
                                         "begin": "(\\[)",
@@ -989,7 +1024,7 @@
                                         },
                                         "patterns": [
                                                 {
-                                                        "include": "#parenthesized_exp__9"
+                                                        "include": "#parenthesized_exp__10"
                                                 }
                                         ],
                                         "end": "(\\])",
@@ -1001,18 +1036,6 @@
                                 },
                                 {
                                         "include": "#expression"
-                                }
-                        ]
-                },
-                "parenthesized_exp__9": {
-                        "patterns": [
-                                {
-                                        "match": "(\\blocals\\b)",
-                                        "name": "keyword.other.usmalltalk"
-                                },
-                                {
-                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
-                                        "name": "variable.other.usmalltalk"
                                 }
                         ]
                 },
