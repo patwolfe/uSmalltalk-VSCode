@@ -309,6 +309,8 @@ contexts [] {
             }
          }
          
+         : include "parenthesized_exp";
+         
       }
       
       : include "expression";
