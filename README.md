@@ -10,17 +10,6 @@ Build the extension by running `npm run package`
 
 In vscode, use `Install from vsix` to install the extension
 
-## Changes vs wolfep15/uSmalltalk-VSCode
-
-* Enhanced "function" definitions
-  * Names of  `class-method`s, `method`s and `define`s are highlighted
-  * Parameters are highlighted
-* `set` and `val` highlight the variable
-* instance variables are highlighted in `[ivars ...]`
-* symbol literals now stop once their reach a delimiter (i.e a bracket or a space)
-* added support for array literals
-* Messages passed to objects are highlighted
-* ... probably more
 
 ## Needs work
 
