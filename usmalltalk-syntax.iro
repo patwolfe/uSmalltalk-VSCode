@@ -1,0 +1,671 @@
+#################################################################
+## uSmalltalk
+################################################################
+##
+## Roughly adheres to the grammer laid out in Norman Ramsey's
+## build prove compare
+##
+##
+## Built with Iro
+## Online demo: http://eeyo.io/iro
+## Documentation: http://eeyo.io/iro/documentation
+################################################################
+
+name                   = usmalltalk
+file_extensions []     = smt;
+
+################################################################
+## Constants
+################################################################
+__DELIMITERS \= \(\)\[\]\{\};\s
+__NAMECHAR \= [^$${__DELIMITERS}]
+__NAME \= $${__NAMECHAR}+
+
+################################################################
+## Styles
+################################################################
+
+styles [] {
+    # The colors don't really matter for vscode, used to debug
+    # in the online editor
+    # Could extend this to other editors/tools by adding 
+    # corresponding scopes
+   .comment : style {
+      color                 = light_green
+      italic                = true
+      textmate_scope        = comment.line
+   }
+   
+   .keyword : style {
+      color                 = cyan
+      textmate_scope        = keyword.other
+   }
+   
+   .numeric : style {
+      color                 = gold
+      textmate_scope        = constant.numeric
+   }
+   
+   .predefined : style {
+      color                 = gold
+      textmate_scope        = constant.language
+   }
+   
+   .string : style {
+      color = yellow
+      textmate_scope        = string.quoted.double
+   }
+   
+   .openparens : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.parens.begin
+   }
+   .closeparens : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.parens.end
+   }
+   
+   .opensquare : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.brackets.begin
+   }
+   .closesquare : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.brackets.end
+   }
+   .blockbegin : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.brackets.begin.block
+   }
+   .blockend : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.brackets.end.block
+   }
+   
+   .blockexpbegin : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.block.begin
+   }
+   .blockexpend : style {
+      color     = red_2
+      textmate_scope        = punctuation.section.block.end
+   }
+   
+   .variable : style {
+      color                 = pink
+      textmate_scope        = variable.other
+   }
+   
+   .variablelang : style {
+      color                 = green
+      textmate_scope        = variable.language
+   }
+   
+   .instancemember : style {
+      color                 = brown
+      textmate_scope        = variable.other.member
+   }
+   
+   .class : style {
+      color                 = red
+      textmate_scope        = entity.name.class
+   }
+   
+   .inheritedclass : style {
+      color                 = red
+      textmate_scope        = entity.other.inherited-class
+   }
+   
+   .functiondef : style {
+      color                 = blue
+      textmate_scope        = entity.name.function
+   }
+   
+   .message : style {
+      color                 = black
+      textmate_scope        = variable.function
+   }
+   
+   .parameter : style {
+      color                 = pink
+      italic                = true
+      textmate_scope        = variable.parameter
+   }
+   
+   .none : style {
+      color                 = white
+      textmate_scope        = source
+   }
+   
+   .zerowidth : style {
+      # To be applied to any zero-width patterns. 
+      # Should never have any visible effect
+      color                 = white
+      background_color      = red
+      textmate_scope        = THISSHOULDNEVERHAPPEN
+   }
+
+}
+
+#################################################
+## Parse contexts
+#################################################
+
+contexts [] {
+
+   ##############################################
+   ## Main Context - Entry point context
+   ##############################################
+   
+   main : context {
+      : include "definition";
+   }
+   
+   #################################################
+   ## Comments 
+   #################################################
+
+   comment : context {
+      : pattern {
+         regex          \= (;.*$)
+         styles []       = .comment;
+      }
+   }
+   #################################################
+   ## Definition forms
+   #################################################
+   
+   definition : context {
+         
+      : inline_push {
+         regex          \= (\()
+         styles []       = .openparens;
+         : pop {  
+            regex       \= (\))
+            styles []    = .closeparens;
+         }   
+         : inline_push {
+            regex \= (\bval\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : inline_push {
+               regex \= ($${__NAME})
+               styles [] = .variable;
+               : pop {
+                  regex \= ((?=\)))
+                styles[] = .zerowidth;
+               }
+               : include "expression"; 
+            }
+         }
+         
+         : inline_push {
+            regex \= (\bcheck-(?:expect|print|assert|error)\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : include "expression"; 
+            
+         }
+         
+         : inline_push {
+            regex \= (\buse\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : pattern {
+               regex \= ($${__NAME})
+               styles[] = .string;
+            }
+            
+         }
+         
+         : inline_push {
+            regex \= (\bclass\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : inline_push {
+               regex \= (\[)
+               styles[] = .opensquare;
+               : pop {
+                  regex \= (\])
+                  styles[] = .closesquare;
+               }
+               : inline_push {
+                  regex \= (\bsubclass-of\b)
+                  styles[] = .keyword;
+                  : pop {
+                     regex \= ((?=\]))
+                     styles[] = .zerowidth;
+                  }
+                  : pattern {
+                     regex \= ($${__NAME})
+                     styles[] = .inheritedclass;
+                  }
+               }
+               : inline_push {
+                  regex \= (\bivars\b)
+                  styles[] = .keyword;
+                  : pop {
+                     regex \= ((?=\]))
+                     styles[] = .zerowidth;
+                  }
+                  : pattern {
+                     regex \= ($${__NAME})
+                     styles[] = .instancemember;
+                  }
+               }
+            }
+            : pattern {
+               regex \= ($${__NAME})
+               styles[] = .class;
+            }
+            : include "methoddefinition";
+            : include "comment";
+            
+         }
+         : inline_push {
+            regex \= (\bdefine\b)
+            styles [] = .keyword;
+            : pop {
+               regex \= ((?=\)))
+               styles [] = .zerowidth;
+            }
+            : pattern {
+               regex \= ($${__NAME})
+               styles [] = .functiondef;
+            } 
+   
+            : inline_push {
+               regex          \= (\()
+               styles []       = .openparens;
+               : pop {  
+                  regex       \= (\))
+                  styles []    = .closeparens;
+               }   
+               : pattern {
+                  regex \= ($${__NAME})
+                  styles [] = .parameter;
+               }
+            }
+            : inline_push {
+               regex \= ((?<=\)))
+               styles[] = .zerowidth;
+               : pop {
+                  regex \= ((?=\)))
+                  styles [] = .zerowidth;
+               }
+               : include "expression";
+            }
+         }
+         
+         : include "parenthesized_exp";
+         
+      }
+      
+      : include "expression";
+      : include "comment";
+   
+   }
+
+   methoddefinition : context {
+      : inline_push {
+         regex          \= (\()
+         styles []       = .openparens;
+         : pop {  
+            regex       \= (\))
+            styles []    = .closeparens;
+         }   
+         : inline_push {
+            regex \= (\bclass-method|method\b)
+            styles [] = .keyword;
+            : pop {
+               regex \= (\))
+               styles [] = .closeparens;
+            }
+            : pattern {
+               regex \= ($${__NAME})
+               styles [] = .functiondef;
+            } 
+   
+            : inline_push {
+               regex          \= (\()
+               styles []       = .openparens;
+               : pop {  
+                  regex       \= ((?=\)))
+                  styles []    = .zerowidth;
+               }   
+               : pattern {
+                  regex \= ($${__NAME})
+                  styles [] = .parameter;
+               }
+            }
+   
+         }
+         : inline_push {
+            regex          \= (\[)
+            styles []       = .opensquare;
+            : pop {  
+               regex       \= (\])
+               styles []    = .closesquare;
+            }   
+            : pattern {
+               regex \= (\blocals\b)
+               styles [] = .keyword;
+            } 
+            
+            : pattern {
+               regex \= ($${__NAME})
+               styles [] = .variable;
+            }
+         }
+         : include "expression";
+      }
+   }
+   
+   #################################################
+   ## Expressions
+   #################################################
+   
+   parenthesized_exp : context {
+   
+         # begin
+         : inline_push {
+            regex \= (\bbegin\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+   
+            : include "expression"; 
+            
+         }
+         
+         # set
+         : inline_push {
+            regex \= (\bset\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : inline_push {
+               regex \= ($${__NAME})
+               styles [] = .variable;
+               : pop {
+                  regex \= ((?=\)))
+                styles[] = .zerowidth;
+               }
+               : include "expression"; 
+            }
+         }
+
+         # return
+         : inline_push {
+            regex \= (\breturn\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : include "expression";
+         }
+
+         # primitive
+         : inline_push {
+            regex \= (\bprimitive\b)
+            styles[] = .keyword ;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : inline_push {
+               regex \= ($${__NAME})
+               styles[] = .predefined;
+               :pop{
+                  regex \= ((?=\)))
+                  styles[] = .zerowidth;
+               }
+               : include "expression";
+            }
+         }
+         
+        # compiled-method
+        : inline_push {
+            regex \= (\bcompiled-method\b)
+            styles [] = .keyword;
+            : pop {
+               regex \= ((?=\)))
+               styles [] = .zerowidth;
+            }
+            : pattern {
+               regex \= ($${__NAME})
+               styles [] = .functiondef;
+            } 
+   
+            : inline_push {
+               regex          \= (\()
+               styles []       = .openparens;
+               : pop {  
+                  regex       \= (\))
+                  styles []    = .closeparens;
+               }   
+               : pattern {
+                  regex \= ($${__NAME})
+                  styles [] = .parameter;
+               }
+            }
+            : inline_push {
+               regex \= ((?<=\)))
+               styles[] = .zerowidth;
+               : pop {
+                  regex \= ((?=\)))
+                  styles [] = .zerowidth;
+               }
+               : inline_push {
+                  regex          \= (\[)
+                  styles []       = .opensquare;
+                  : pop {  
+                     regex       \= (\])
+                     styles []    = .closesquare;
+                  }   
+                  : pattern {
+                     regex \= (\blocals\b)
+                     styles [] = .keyword;
+                  } 
+                  : pattern {
+                     regex \= ($${__NAME})
+                     styles [] = .variable;
+                  } 
+               }
+               : include "expression";
+            }
+         }
+         
+         ### begin (exp message-name {exp})
+         : inline_push {
+            # match against the end of the first
+            # thing in a parenthtized expression
+            # either a block (}, ]), a name (NAMECHAR),
+            # or another parenthetised expression (`)`)
+            regex \= ((?<=[\)\]\};]|$${__NAMECHAR}))
+            styles[] = .zerowidth;
+            : pop {
+               regex \= ((?=\)))
+               styles[] = .zerowidth;
+            }
+            : inline_push {
+               # style the next name that appears
+               regex \= ($${__NAME})
+               styles[] = .message;
+               : pop {
+                  regex \= ((?=\)))
+                  styles[] = .zerowidth;
+               }
+               # everything until the closing parens 
+               # is an expression
+               : include "expression";
+            }
+            
+         }
+         : include "expression";
+        ### end (exp message-name {exp})
+   }
+   
+   expression : context {
+         
+         : include "comment";
+         # mark some special names
+         : pattern {
+            regex \= (\bself|super\b)
+            styles[] = .variablelang;
+         }
+
+         : include "block";
+         
+         # block syntactic sugar
+         : inline_push {
+            regex \= (\{)
+            styles[] = .blockexpbegin;
+            : pop {
+               regex \= (\})
+               styles[] = .blockexpend;
+            }
+            :include "expression";
+         }
+         : inline_push {
+            regex          \= (\()
+            styles []       = .openparens;
+            : pop {  
+               regex       \= (\))
+               styles []    = .closeparens;
+            }
+            :include "parenthesized_exp";
+         }
+         
+         : include "literal";
+         
+         
+         # Not part of the grammar officially, but marks any uppercase name
+         # as a class
+         : pattern {
+            regex \= ([A-Z]$${__NAME})
+            styles [] = .class;
+         }
+         
+
+         : pattern {
+            regex \= ($${__NAME})
+            styles [] = .none;
+         }
+   }
+   
+   block : context {
+        : inline_push {
+         regex          \= (\[)
+         styles []       = .blockbegin;
+         : pop {  
+            regex       \= (\])
+            styles []    = .blockend;
+         }   
+         : inline_push {
+            regex \= (\bblock\b)
+            styles [] = .keyword;
+            : pop {
+               regex \= (\))
+               styles [] = .closeparens;
+            }
+            : inline_push {
+               regex          \= (\()
+               styles []       = .openparens;
+               : pop {  
+                  regex       \= ((?=\)))
+                  styles []    = .zerowidth;
+               }   
+               : pattern {
+                  regex \= ($${__NAME})
+                  styles [] = .parameter;
+               }
+            }
+         }
+         : include "expression";
+      }
+   }
+   
+   
+   ###########################################
+   ## Literals
+   ###########################################
+   
+   
+   
+   
+   literal : context {
+      : include "numeric";
+      : pattern {
+         regex \= ((?<=^|[$${__DELIMITERS}])(true|false)(?=$|[$${__DELIMITERS}]))
+         styles [] = .predefined;
+      }
+      : pattern {
+         regex \= ((?<=^|[$${__DELIMITERS}])nil(?=$|[$${__DELIMITERS}]))
+         styles [] = .predefined;
+      }
+      : include "string";
+      : include "array";
+   }
+   
+   numeric : context {
+      : pattern {
+         regex          \= ((?<=^|[$${__DELIMITERS}])-?\d+(?=$|[$${__DELIMITERS}]))
+         styles []       = .numeric;
+      }
+   }
+   
+   string : context {
+      : pattern {
+         regex  \= (\'$${__NAME})
+         styles []     = .string;
+      }
+   }
+   
+   array : context {
+     : inline_push {
+         regex \= ('\()
+         styles [] = .openparens;
+         : pop {
+            regex \= (\))
+            styles [] = .closeparens;
+         }
+         : include "array_element";
+     }
+   }
+   
+   array_element : context {
+     : include "numeric";
+     : pattern {
+         regex \= ($${__NAME})
+         styles [] = .string;
+     }
+     : inline_push {
+         regex \= (\()
+         styles [] = .openparens;
+         : pop {
+            regex \= (\))
+            styles [] = .closeparens;
+         }
+         : include "array_element";
+     }
+   }
+   
+}

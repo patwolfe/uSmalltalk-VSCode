@@ -1,64 +1,1051 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "uSmalltalk",
-	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#comments"
-		},
-		{
-			"include": "#methods"
-		}
-	],
-	"repository": {
-		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.usmalltalk-syntax",
-				"match": "\\b(set|begin|primitive|return|block|locals)\\b"
-				},
-				{
-				"name": "keyword.other.usmalltalk-syntax",
-				"match": "\\b(class-method|class|method|self|super|ivars|subclass-of)\\b"
-				},
-				{
-				"name": "support.class",
-				"match": "\\bclass\\b"
-				},
-				{
-				"name": "entity.name.class",
-				"match": "\\b[A-Z][^ \t]*\\b"
-				}
-			]
-		},
-		"strings": {
-			"name": "string.quoted.double.usmalltalk-syntax",
-			"begin": "'",
-			"end": "[ \t\n]",
-			"patterns": [
-				{
-					"name": "constant.character.escape.usmalltalk-syntax",
-					"match": "\\\\."
-				}
-			]
-		},
-		"comments": {
-			"name": "comment.line.double-slash",
-			"begin": ";",
-			"end": "\n",
-			"patterns": [{"name": "comment.line", "match": "\\\\."}]
-		},
-		"methods": {
-			"patterns": [{
-				"name": "variable.function",
-				"match": "[^ \t]*:"
-				}
-			]
-		}
-	},
-	"scopeName": "source.smt"
+        "fileTypes": [
+                "smt"
+        ],
+        "name": "usmalltalk",
+        "patterns": [
+                {
+                        "include": "#main"
+                }
+        ],
+        "scopeName": "source.usmalltalk",
+        "uuid": "",
+        "repository": {
+                "main": {
+                        "patterns": [
+                                {
+                                        "include": "#definition"
+                                }
+                        ]
+                },
+                "array": {
+                        "patterns": [
+                                {
+                                        "begin": "('\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#array__1"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "array__1": {
+                        "patterns": [
+                                {
+                                        "include": "#array_element"
+                                }
+                        ]
+                },
+                "array_element": {
+                        "patterns": [
+                                {
+                                        "include": "#numeric"
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "string.quoted.double.usmalltalk"
+                                },
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#array_element__1"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "array_element__1": {
+                        "patterns": [
+                                {
+                                        "include": "#array_element"
+                                }
+                        ]
+                },
+                "block": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\[)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.begin.block.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#block__1"
+                                                }
+                                        ],
+                                        "end": "(\\])",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.end.block.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "block__1": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\bblock\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#block__2"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "block__2": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#block__3"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "block__3": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.parameter.usmalltalk"
+                                }
+                        ]
+                },
+                "comment": {
+                        "patterns": [
+                                {
+                                        "match": "(;.*$)",
+                                        "name": "comment.line.usmalltalk"
+                                }
+                        ]
+                },
+                "definition": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__1"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#expression"
+                                },
+                                {
+                                        "include": "#comment"
+                                }
+                        ]
+                },
+                "definition__1": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\bval\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__2"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bcheck-(?:expect|print|assert|error)\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__4"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\buse\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__5"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bclass\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__6"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bdefine\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__10"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#parenthesized_exp"
+                                }
+                        ]
+                },
+                "definition__10": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.name.function.usmalltalk"
+                                },
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__11"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "((?<=\\)))",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__12"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "definition__11": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.parameter.usmalltalk"
+                                }
+                        ]
+                },
+                "definition__12": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "definition__2": {
+                        "patterns": [
+                                {
+                                        "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "variable.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__3"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "definition__3": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "definition__4": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "definition__5": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "string.quoted.double.usmalltalk"
+                                }
+                        ]
+                },
+                "definition__6": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\[)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__7"
+                                                }
+                                        ],
+                                        "end": "(\\])",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.name.class.usmalltalk"
+                                },
+                                {
+                                        "include": "#methoddefinition"
+                                },
+                                {
+                                        "include": "#comment"
+                                }
+                        ]
+                },
+                "definition__7": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\bsubclass-of\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__8"
+                                                }
+                                        ],
+                                        "end": "((?=\\]))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bivars\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#definition__9"
+                                                }
+                                        ],
+                                        "end": "((?=\\]))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "definition__8": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.other.inherited-class.usmalltalk"
+                                }
+                        ]
+                },
+                "definition__9": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.other.member.usmalltalk"
+                                }
+                        ]
+                },
+                "expression": {
+                        "patterns": [
+                                {
+                                        "include": "#comment"
+                                },
+                                {
+                                        "match": "(\\bself|super\\b)",
+                                        "name": "variable.language.usmalltalk"
+                                },
+                                {
+                                        "include": "#block"
+                                },
+                                {
+                                        "begin": "(\\{)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.block.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#expression__1"
+                                                }
+                                        ],
+                                        "end": "(\\})",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.block.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#expression__2"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#literal"
+                                },
+                                {
+                                        "match": "([A-Z][^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.name.class.usmalltalk"
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "source.usmalltalk"
+                                }
+                        ]
+                },
+                "expression__1": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "expression__2": {
+                        "patterns": [
+                                {
+                                        "include": "#parenthesized_exp"
+                                }
+                        ]
+                },
+                "literal": {
+                        "patterns": [
+                                {
+                                        "include": "#numeric"
+                                },
+                                {
+                                        "match": "((?<=^|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s])(true|false)(?=$|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s]))",
+                                        "name": "constant.language.usmalltalk"
+                                },
+                                {
+                                        "match": "((?<=^|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s])nil(?=$|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s]))",
+                                        "name": "constant.language.usmalltalk"
+                                },
+                                {
+                                        "include": "#string"
+                                },
+                                {
+                                        "include": "#array"
+                                }
+                        ]
+                },
+                "methoddefinition": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#methoddefinition__1"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "methoddefinition__1": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\bclass-method|method\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#methoddefinition__2"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\[)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#methoddefinition__4"
+                                                }
+                                        ],
+                                        "end": "(\\])",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "methoddefinition__2": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.name.function.usmalltalk"
+                                },
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#methoddefinition__3"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "methoddefinition__3": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.parameter.usmalltalk"
+                                }
+                        ]
+                },
+                "methoddefinition__4": {
+                        "patterns": [
+                                {
+                                        "match": "(\\blocals\\b)",
+                                        "name": "keyword.other.usmalltalk"
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.other.usmalltalk"
+                                }
+                        ]
+                },
+                "numeric": {
+                        "patterns": [
+                                {
+                                        "match": "((?<=^|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s])-?\\d+(?=$|[\\(\\)\\[\\]\\{\\}\\x{003b}\\s]))",
+                                        "name": "constant.numeric.usmalltalk"
+                                }
+                        ]
+                },
+                "parenthesized_exp": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\bbegin\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__1"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bset\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__2"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\breturn\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__4"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bprimitive\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__5"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "(\\bcompiled-method\\b)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "keyword.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__7"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "((?<=[\\)\\]\\}\\x{003b}]|[^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]))",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__11"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__1": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__10": {
+                        "patterns": [
+                                {
+                                        "match": "(\\blocals\\b)",
+                                        "name": "keyword.other.usmalltalk"
+                                },
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.other.usmalltalk"
+                                }
+                        ]
+                },
+                "parenthesized_exp__11": {
+                        "patterns": [
+                                {
+                                        "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "variable.function.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__12"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "parenthesized_exp__12": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__2": {
+                        "patterns": [
+                                {
+                                        "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "variable.other.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__3"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "parenthesized_exp__3": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__4": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__5": {
+                        "patterns": [
+                                {
+                                        "begin": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "constant.language.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__6"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "parenthesized_exp__6": {
+                        "patterns": [
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "parenthesized_exp__7": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "entity.name.function.usmalltalk"
+                                },
+                                {
+                                        "begin": "(\\()",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__8"
+                                                }
+                                        ],
+                                        "end": "(\\))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.parens.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "begin": "((?<=\\)))",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__9"
+                                                }
+                                        ],
+                                        "end": "((?=\\)))",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "THISSHOULDNEVERHAPPEN.usmalltalk"
+                                                }
+                                        }
+                                }
+                        ]
+                },
+                "parenthesized_exp__8": {
+                        "patterns": [
+                                {
+                                        "match": "([^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "variable.parameter.usmalltalk"
+                                }
+                        ]
+                },
+                "parenthesized_exp__9": {
+                        "patterns": [
+                                {
+                                        "begin": "(\\[)",
+                                        "beginCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.begin.usmalltalk"
+                                                }
+                                        },
+                                        "patterns": [
+                                                {
+                                                        "include": "#parenthesized_exp__10"
+                                                }
+                                        ],
+                                        "end": "(\\])",
+                                        "endCaptures": {
+                                                "1": {
+                                                        "name": "punctuation.section.brackets.end.usmalltalk"
+                                                }
+                                        }
+                                },
+                                {
+                                        "include": "#expression"
+                                }
+                        ]
+                },
+                "string": {
+                        "patterns": [
+                                {
+                                        "match": "(\\'[^\\(\\)\\[\\]\\{\\}\\x{003b}\\s]+)",
+                                        "name": "string.quoted.double.usmalltalk"
+                                }
+                        ]
+                }
+        }
 }
