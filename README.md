@@ -21,5 +21,5 @@ In vscode, use `Install from vsix` to install the extension
 * The grammar was re-written essentially as a transcription of the grammar
   presented in Prof. Ramsey's "Build, Prove, Compare"
 
-* Written using [Iro](https://eeyo.io/iro/documentation/) which can compile 
+* Written using [Iro](https://eeyo.io/iro/documentation/), ([web editor](https://eeyo.io/iro/)) which can compile 
 the file down to textmate format.
